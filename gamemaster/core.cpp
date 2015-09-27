@@ -3,6 +3,7 @@
 
 #include "lexicon/common.hpp"
 #include "module.hpp"
+#include "error.hpp"
 
 int main(int argc, char * * argv) {
 	if (argc == 1) {
@@ -11,7 +12,7 @@ int main(int argc, char * * argv) {
 	} else {
 		for (int argi = 1; argi < argc; argi++) {
 			char const * arg = argv[argi];
-			module::load(arg);
+			if (!module::load(arg)) gmerrf(errlev::term, "failed to load requested modules.");
 		}
 	}
     return 0;

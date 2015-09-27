@@ -17,5 +17,7 @@
 #endif
 
 XFUNC(1, void, mod_initialize, void)
+XFUNC(1, void, mod_shutdown, void)
+XFUNC(0, void, mod_ping, void)
 
 #undef XFUNC

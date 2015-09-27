@@ -1,5 +1,11 @@
 #include "lexicon/common.hpp"
 
-int derp() {
-	return 0;
+#include "player_api.hpp"
+
+void mod_initialize() {
+
+}
+
+void mod_shutdown() {
+
 }

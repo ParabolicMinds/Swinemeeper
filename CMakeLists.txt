@@ -24,6 +24,8 @@ set(CMAKE_INSTALL_PREFIX "./install")
 
 set(CMAKE_INSTALL_RPATH "$ORIGIN")
 
+set(PLAYER_API "${PROJECT_DIRECTORY}/player_api.hpp")
+
 ## LEXICON ##
 
 set(LEXICON_NAME "lexicon")
@@ -36,7 +38,7 @@ file(GLOB LEXICON_FILES
     "${PROJECT_DIRECTORY}/${LEXICON_NAME}/*.hpp"
 )
 
-add_library(${LEXICON_NAME} SHARED ${LEXICON_FILES})
+add_library(${LEXICON_NAME} SHARED ${LEXICON_FILES} ${PLAYER_API})
 target_include_directories(${LEXICON_NAME} PUBLIC "${PROJECT_DIRECTORY}")
 target_include_directories(${LEXICON_NAME} PUBLIC "${PROJECT_DIRECTORY}/${LEXICON_NAME}")
 target_link_libraries(${LEXICON_NAME} ${LEXICON_LIBRARIES})
@@ -57,7 +59,7 @@ file(GLOB GAMEMASTER_FILES
     "${PROJECT_DIRECTORY}/${GAMEMASTER_NAME}/*.hpp"
 )
 
-add_executable(${GAMEMASTER_NAME} ${GAMEMASTER_FILES})
+add_executable(${GAMEMASTER_NAME} ${GAMEMASTER_FILES} ${PLAYER_API})
 target_include_directories(${GAMEMASTER_NAME} PUBLIC "${PROJECT_DIRECTORY}")
 target_include_directories(${GAMEMASTER_NAME} PUBLIC "${PROJECT_DIRECTORY}/${GAMEMASTER_NAME}")
 target_link_libraries(${GAMEMASTER_NAME} ${GAMEMASTER_LIBRARIES} ${LEXICON_NAME})

@@ -23,7 +23,7 @@ bool module::load(char const * path) {
 	module_t mod;
 	mod.handle = dlopen(vas("./modules/%s", path), RTLD_NOW);
 	if (!mod.handle) {
-		gmerror(errlev::error, "%s: module \"%s\" does not exist.", __PRETTY_FUNCTION__, path);
+		gmerrf(errlev::error, "module \"%s\" does not exist.", path);
 		return false;
 	}
 
