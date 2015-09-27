@@ -7,16 +7,16 @@
 	mod.fname = reinterpret_cast<rtype (*)(__VA_ARGS__)>(dlsym(mod.handle, #fname)); \
 	if (!mod.fname) { \
 		if (required) { \
-			gmerror(errlev::error, "%s: module \"%s\" missing required function: \"%s\".", __PRETTY_FUNCTION__, path, #fname); \
+			gmerrf(errlev::error, "%s: module \"%s\" missing required function: \"%s\".", __PRETTY_FUNCTION__, path, #fname); \
 			dlclose(mod.handle); \
 			return false; \
 		} else { \
-			gmerror(errlev::warning, "%s: module \"%s\" missing optional function: \"%s\".", __PRETTY_FUNCTION__, path, #fname); \
+			gmerrf(errlev::warning, "%s: module \"%s\" missing optional function: \"%s\".", __PRETTY_FUNCTION__, path, #fname); \
 		} \
 	}
 #endif
 
-XFUNC(1, void, mod_initialize, void)
+XFUNC(1, bool, mod_initialize, void)
 XFUNC(1, void, mod_shutdown, void)
 XFUNC(0, void, mod_ping, void)
 

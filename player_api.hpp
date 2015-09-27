@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-PAPIPUBLIC void mod_initialize();
+PAPIPUBLIC bool mod_initialize();
 PAPIPUBLIC void mod_shutdown();
 
 PAPIPUBLIC void mod_ping();

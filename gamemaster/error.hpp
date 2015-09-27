@@ -2,8 +2,9 @@
 #define GM_ERROR_HPP
 
 enum class errlev : int { debug, log, warning, error, term };
-void gmerror(errlev, char const * fmt...);
+void gmerror(errlev, char const * str);
 
-#define gmerrf(errlev, fmt...) gmerror(errlev, "%s: %s", __PRETTY_FUNCTION__, fmt)
+#define gmerrv(errlev, fmt ...) gmerror(errlev, vas(fmt))
+#define gmerrf(errlev, fmt ...) gmerror(errlev, vas("%s: %s", __PRETTY_FUNCTION__, vas(fmt)))
 
 #endif //GM_ERROR_HPP

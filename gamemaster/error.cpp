@@ -1,15 +1,10 @@
-#include <cstdarg>
 #include <cstdio>
 #include <exception>
 
 #include "lexicon/common.hpp"
 #include "error.hpp"
 
-void gmerror(errlev lev, char const * fmt...) {
-	va_list va;
-	va_start(va, fmt);
-	char const * str = vasa(fmt, va);
-
+void gmerror(errlev lev, char const * str) {
 	switch(lev) {
 	default:
 	case errlev::debug: //TODO: DEBUG

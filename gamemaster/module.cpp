@@ -32,7 +32,11 @@ bool module::load(char const * path) {
 	#include "xmodule.hpp"
 	#undef XMOD_SYM
 
-	return true;
+	if (mod.mod_initialize()) return true;
+
+	gmerrf(errlev::error, "module \"%s\" successfully linked, but returned error on initialization.", path);
+	dlclose(mod.handle);
+	return false;
 }
 
 bool module::unload(char const *) {

@@ -2,10 +2,14 @@
 
 #include "player_api.hpp"
 
-void mod_initialize() {
+PAPIPUBLIC bool mod_initialize() {
+	return false;
+}
+
+PAPIPUBLIC void mod_shutdown() {
 
 }
 
-void mod_shutdown() {
+PAPIPUBLIC void mod_ping() {
 
 }

@@ -6,6 +6,7 @@
 #include "error.hpp"
 
 int main(int argc, char * * argv) {
+	gmerrf(errlev::log, vas("%i %s", 500, "Test"));
 	if (argc == 1) {
 		printf("Cannot start game with no players.\n");
 		return 1;
