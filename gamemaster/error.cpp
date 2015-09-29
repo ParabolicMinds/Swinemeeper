@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <exception>
 
-#include "lexicon/common.hpp"
+#include "lexicon/common.h"
 #include "error.hpp"
 
 void gmerror(errlev lev, char const * str) {

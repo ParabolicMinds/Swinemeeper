@@ -1,15 +1,12 @@
-#include "lexicon/common.hpp"
+#include "lexicon/common.h"
+#include "player_api.h"
 
-#include "player_api.hpp"
+#include <cstdio>
 
-PAPIPUBLIC bool mod_initialize() {
-	return false;
+PAPIPUBLIC bool mod_initialize(handle_t handle) {
+	return true;
 }
 
 PAPIPUBLIC void mod_shutdown() {
-
-}
-
-PAPIPUBLIC void mod_ping() {
 
 }

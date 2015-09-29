@@ -1,12 +1,18 @@
 #include <cstdio>
 #include <cstring>
 
-#include "lexicon/common.hpp"
+#include "lexicon/common.h"
 #include "module.hpp"
 #include "error.hpp"
 
+char com_str[1024];
+
+int command_loop() {
+	for (;;) {
+	}
+}
+
 int main(int argc, char * * argv) {
-	gmerrf(errlev::log, vas("%i %s", 500, "Test"));
 	if (argc == 1) {
 		printf("Cannot start game with no players.\n");
 		return 1;
@@ -16,5 +22,5 @@ int main(int argc, char * * argv) {
 			if (!module::load(arg)) gmerrf(errlev::term, "failed to load requested modules.");
 		}
 	}
-    return 0;
+	return command_loop();
 }

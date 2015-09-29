@@ -1,16 +1,16 @@
 #ifndef SWINEMEEPER_PLAYER_API_HPP
 #define SWINEMEEPER_PLAYER_API_HPP
 
-#define PAPIPUBLIC __attribute__ ((visibility ("default")))
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-PAPIPUBLIC bool mod_initialize();
-PAPIPUBLIC void mod_shutdown();
+#define PAPIPUBLIC __attribute__ ((visibility ("default")))
 
-PAPIPUBLIC void mod_ping();
+typedef void * handle_t;
+
+PAPIPUBLIC bool mod_initialize(handle_t);
+PAPIPUBLIC void mod_shutdown();
 
 #ifdef __cplusplus
 }

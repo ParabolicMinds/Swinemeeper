@@ -7,13 +7,13 @@ set(CMAKE_BUILD_TYPE "DEBUG")
 
 set(PROJECT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
-enable_language(CXX)
+enable_language(C CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb3")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c11 -march=native -mtune=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -march=native -mtune=native")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb3 -Og")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb3 -Og")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Ofast")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -24,7 +24,7 @@ set(CMAKE_INSTALL_PREFIX "./install")
 
 set(CMAKE_INSTALL_RPATH "$ORIGIN")
 
-set(PLAYER_API "${PROJECT_DIRECTORY}/player_api.hpp")
+set(PLAYER_API "${PROJECT_DIRECTORY}/player_api.h")
 
 ## LEXICON ##
 
