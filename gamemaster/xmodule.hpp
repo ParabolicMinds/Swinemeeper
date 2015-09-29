@@ -10,14 +10,14 @@
 
 #ifdef XMOD_SYM
 #define XFUNC0(fname) \
-	mod.fname = reinterpret_cast<void (*)(void)>(dlsym(mod.handle, "mod_"#fname)); \
-	if (!mod.fname) { \
-		gmerrf(errlev::warning, "%s: module \"%s\" missing function: \"%s\".", __PRETTY_FUNCTION__, path, "mod_"#fname); \
+	imod.fname = reinterpret_cast<void (*)(void)>(dlsym(imod.handle, "mod_"#fname)); \
+	if (!imod.fname) { \
+		gmerrf(errlev::warning, "module \"%s\" missing function: \"%s\".", path, "mod_"#fname); \
 	}
 #define XFUNC1(fname, arg1) \
-	mod.fname = reinterpret_cast<void (*)(arg1)>(dlsym(mod.handle, "mod_"#fname)); \
-	if (!mod.fname) { \
-		gmerrf(errlev::warning, "%s: module \"%s\" missing function: \"%s\".", __PRETTY_FUNCTION__, path, "mod_"#fname); \
+	imod.fname = reinterpret_cast<void (*)(arg1)>(dlsym(imod.handle, "mod_"#fname)); \
+	if (!imod.fname) { \
+		gmerrf(errlev::warning, "module \"%s\" missing function: \"%s\".", path, "mod_"#fname); \
 	}
 #endif
 
@@ -30,6 +30,8 @@
 #define XFUNC0(fname) void module::signal_##fname() { for (module_t & mod : modules) if (mod.fname) mod.fname(); }
 #define XFUNC1(fname, arg1) void module::signal_##fname(arg1 a) { for (module_t & mod : modules) if (mod.fname) mod.fname(a); }
 #endif
+
+XFUNC0(game_start)
 
 #undef XFUNC0
 #undef XFUNC1

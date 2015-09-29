@@ -8,8 +8,7 @@
 char com_str[1024];
 
 int command_loop() {
-	for (;;) {
-	}
+	return 0;
 }
 
 int main(int argc, char * * argv) {

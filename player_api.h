@@ -6,11 +6,15 @@ extern "C" {
 #endif
 
 #define PAPIPUBLIC __attribute__ ((visibility ("default")))
+#define GMAPIPUBLIC __attribute__ ((visibility ("default"))) extern
 
 typedef void * handle_t;
 
 PAPIPUBLIC bool mod_initialize(handle_t);
 PAPIPUBLIC void mod_shutdown();
+PAPIPUBLIC void mod_game_start();
+
+GMAPIPUBLIC void gm_printf(handle_t, char const * fmt, ...);
 
 #ifdef __cplusplus
 }
