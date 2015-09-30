@@ -14,6 +14,8 @@ namespace module {
 
 	void shutdown();
 
+	void signal_update();
+
 	#define XMOD_CALL_DEF
 	#include "xmodule.hpp"
 	#undef XMOD_CALL_DEF

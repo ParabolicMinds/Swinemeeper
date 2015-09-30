@@ -7,8 +7,11 @@ static handle_t h;
 
 PAPIPUBLIC bool mod_initialize(handle_t handle) {
 	h = handle;
-	gm_printf(handle, "TEST");
 	return true;
+}
+
+PAPIPUBLIC bool mod_update() {
+	return false;
 }
 
 PAPIPUBLIC void mod_shutdown() {

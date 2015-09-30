@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <dlfcn.h>
 #include <vector>
 
@@ -13,6 +14,7 @@ typedef struct module_s {
 	void * handle;
 	char * name;
 	bool(*initialize)(handle_t);
+	bool(*update)();
 	void(*shutdown)(void);
 	// Imported Functions Declaration
 	#define XMOD_STRUCT
@@ -50,6 +52,13 @@ bool module::load(char const * path) {
 		return false;
 	}
 
+	imod.update = reinterpret_cast<bool (*)(void)>(dlsym(imod.handle, "mod_update"));
+	if (!imod.update) {
+		gmerrf(errlev::error, "module \"%s\" missing REQUIRED function: \"%s\".", path, "mod_update");
+		dlclose(imod.handle);
+		return false;
+	}
+
 	imod.shutdown = reinterpret_cast<void (*)(void)>(dlsym(imod.handle, "mod_shutdown"));
 	if (!imod.shutdown) {
 		gmerrf(errlev::warning, "module \"%s\" missing function: \"%s\".", path, "mod_shutdown");
@@ -77,13 +86,22 @@ bool module::load(char const * path) {
 }
 
 bool module::unload(char const * path) {
-	for (module_t & mod : modules) if (!strcmp(path, mod.name)) close_module(mod);
 	return false;
 }
 
 void module::shutdown() {
 	for (module_t & mod : modules) {
 		close_module(mod);
+	}
+}
+
+void module::signal_update() {
+	auto iter = modules.begin();
+	while(iter != modules.end()) {
+		if (iter->update()) continue;
+		gmerrf(errlev::log, vas("module \"%s\" (0x%lx) requested graceful shutdown.", iter->name, iter->handle));
+		close_module(*iter);
+		iter = modules.erase(iter);
 	}
 }
 

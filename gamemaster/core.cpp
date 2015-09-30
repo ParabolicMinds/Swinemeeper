@@ -2,13 +2,21 @@
 #include <cstring>
 
 #include "lexicon/common.h"
+#include "lexicon/timing.h"
 #include "module.hpp"
 #include "error.hpp"
 
 char com_str[1024];
 
 int command_loop() {
-	return 0;
+	timing_t t;
+	timing_setup(&t, 125);
+	timing_start(&t);
+	for (;;) {
+		module::signal_update();
+		gmerrf(errlev::log, "Frame: Impulse (%f s), Game Time(%i ms)", t.impulse, t.gametime);
+		timing_end_frame(&t);
+	}
 }
 
 int main(int argc, char * * argv) {
