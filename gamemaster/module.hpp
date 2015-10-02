@@ -11,10 +11,9 @@ namespace module {
 
 	bool load(char const *);
 	bool unload(char const *);
-
 	void shutdown();
 
-	void signal_update();
+	bool signal_update(unsigned int gametime, double impulse);
 
 	#define XMOD_CALL_DEF
 	#include "xmodule.hpp"

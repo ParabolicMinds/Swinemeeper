@@ -1,11 +1,9 @@
-#ifndef LEXICON_BOARD_H
-#define LEXICON_BOARD_H
+#ifndef LEXICON_BOARD_HPP
+#define LEXICON_BOARD_HPP
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "common.hpp"
 
-#include "common.h"
+namespace lexicon {
 
 typedef unsigned char	mine_t;
 typedef unsigned short	adj_t;
@@ -29,8 +27,6 @@ void board_create(board_t *, dimn_t, dim_t const *);
 void board_destroy(board_t *);
 cell_t * board_cell_for_coord(board_t const *, dim_t const *);
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif //LEXICON_BOARD_HPP

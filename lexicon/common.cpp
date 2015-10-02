@@ -1,6 +1,8 @@
-#include <string.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdarg>
+#include <cstdio>
+
+#include "common.hpp"
 
 #define MBUF_SIZE 1024
 #define MBUF_NUM 8

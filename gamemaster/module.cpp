@@ -2,9 +2,8 @@
 #include <dlfcn.h>
 #include <vector>
 
-#include "player_api.h"
-
-#include "lexicon/common.h"
+#include "lexicon/common.hpp"
+#include "lexicon/player_api.hpp"
 #include "module.hpp"
 #include "error.hpp"
 
@@ -14,7 +13,7 @@ typedef struct module_s {
 	void * handle;
 	char * name;
 	bool(*initialize)(handle_t);
-	bool(*update)();
+	bool(*update)(unsigned int gametime, double impulse);
 	void(*shutdown)(void);
 	// Imported Functions Declaration
 	#define XMOD_STRUCT
@@ -52,7 +51,7 @@ bool module::load(char const * path) {
 		return false;
 	}
 
-	imod.update = reinterpret_cast<bool (*)(void)>(dlsym(imod.handle, "mod_update"));
+	imod.update = reinterpret_cast<bool (*)(unsigned int, double)>(dlsym(imod.handle, "mod_update"));
 	if (!imod.update) {
 		gmerrf(errlev::error, "module \"%s\" missing REQUIRED function: \"%s\".", path, "mod_update");
 		dlclose(imod.handle);
@@ -95,14 +94,15 @@ void module::shutdown() {
 	}
 }
 
-void module::signal_update() {
+bool module::signal_update(unsigned int gametime, double impulse) {
 	auto iter = modules.begin();
 	while(iter != modules.end()) {
-		if (iter->update()) continue;
+		if (iter->update(gametime, impulse)) {iter++; continue;}
 		gmerrf(errlev::log, vas("module \"%s\" (0x%lx) requested graceful shutdown.", iter->name, iter->handle));
 		close_module(*iter);
 		iter = modules.erase(iter);
 	}
+	return modules.size();
 }
 
 #define XMOD_CALL
@@ -111,9 +111,9 @@ void module::signal_update() {
 
 #define gmmodstart(erret...) module_t * mod = find_module(h); if (!mod){ gmerrf(errlev::error, vas("module called GM function with invalid handle (0x%lx).", h)); return erret;}
 
-GMAPIPUBLIC void gm_printf(handle_t h, const char * fmt, ...) {
+GMAPIPUBLIC void gm_printf(handle_t h, errlev err, const char * fmt, ...) {
 	gmmodstart();
 	va_list va;
 	va_start(va, fmt);
-	gmerror(errlev::log, vas("%s (0x%lx): %s", mod->name, h, vasa(fmt, va)));
+	gmerror(err, vas("%s (0x%lx): %s", mod->name, h, vasa(fmt, va)));
 }

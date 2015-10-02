@@ -7,13 +7,10 @@ set(CMAKE_BUILD_TYPE "DEBUG")
 
 set(PROJECT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
-enable_language(C CXX)
+enable_language(CXX)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=gnu11 -march=native -mtune=native")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -march=native -mtune=native")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb3 -Og")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb3 -Og")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Ofast")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -23,8 +20,6 @@ set(CMAKE_SHARED_MODULE_SUFFIX "")
 set(CMAKE_INSTALL_PREFIX "./install")
 
 set(CMAKE_INSTALL_RPATH "$ORIGIN")
-
-set(PLAYER_API "${PROJECT_DIRECTORY}/player_api.h")
 
 ## LEXICON ##
 
@@ -38,7 +33,7 @@ file(GLOB LEXICON_FILES
     "${PROJECT_DIRECTORY}/${LEXICON_NAME}/*.hpp"
 )
 
-add_library(${LEXICON_NAME} SHARED ${LEXICON_FILES} ${PLAYER_API})
+add_library(${LEXICON_NAME} SHARED ${LEXICON_FILES})
 target_include_directories(${LEXICON_NAME} PUBLIC "${PROJECT_DIRECTORY}")
 target_include_directories(${LEXICON_NAME} PUBLIC "${PROJECT_DIRECTORY}/${LEXICON_NAME}")
 target_link_libraries(${LEXICON_NAME} ${LEXICON_LIBRARIES})
@@ -59,7 +54,7 @@ file(GLOB GAMEMASTER_FILES
     "${PROJECT_DIRECTORY}/${GAMEMASTER_NAME}/*.hpp"
 )
 
-add_executable(${GAMEMASTER_NAME} ${GAMEMASTER_FILES} ${PLAYER_API})
+add_executable(${GAMEMASTER_NAME} ${GAMEMASTER_FILES})
 target_include_directories(${GAMEMASTER_NAME} PUBLIC "${PROJECT_DIRECTORY}")
 target_include_directories(${GAMEMASTER_NAME} PUBLIC "${PROJECT_DIRECTORY}/${GAMEMASTER_NAME}")
 target_link_libraries(${GAMEMASTER_NAME} ${GAMEMASTER_LIBRARIES} ${LEXICON_NAME})

@@ -1,10 +1,14 @@
 #include <cstdio>
 #include <exception>
+#include <mutex>
 
-#include "lexicon/common.h"
+#include "lexicon/common.hpp"
 #include "error.hpp"
 
+static std::mutex print_m;
+
 void gmerror(errlev lev, char const * str) {
+	print_m.lock();
 	switch(lev) {
 	default:
 	case errlev::debug: //TODO: DEBUG
@@ -20,10 +24,12 @@ void gmerror(errlev lev, char const * str) {
 		fprintf(stderr, "ERROR: %s", str);
 		if (str[strlen(str)-1] != '\n') fputc('\n', stderr);
 		break;
-	case errlev::term:
-		fprintf(stderr, "FATAL: %s", str);
-		if (str[strlen(str)-1] != '\n') fputc('\n', stderr);
-		std::terminate();
-		break;
 	}
+	print_m.unlock();
+}
+
+void gmterm(char const * str, int code) {
+	fprintf(stderr, "FATAL: %s", str);
+	if (str[strlen(str)-1] != '\n') fputc('\n', stderr);
+	exit(code);
 }

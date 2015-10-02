@@ -1,6 +1,6 @@
-#include "board.h"
+#include "board.hpp"
 
-void board_create(board_t * board, dimn_t dimn, dim_t const * dims) {
+void lexicon::board_create(board_t * board, dimn_t dimn, dim_t const * dims) {
 	board->dimn = dimn;
 	board->dims = (dim_t *)(malloc(dimn * sizeof(dim_t)));
 	memcpy(board->dims, dims, dimn * sizeof(dim_t));
@@ -11,12 +11,12 @@ void board_create(board_t * board, dimn_t dimn, dim_t const * dims) {
 	board->cells = (cell_t *)(calloc(board->cell_len, sizeof(cell_t)));
 }
 
-void board_destroy(board_t * board) {
+void lexicon::board_destroy(board_t * board) {
 	free(board->dims);
 	free(board->cells);
 }
 
-cell_t * board_cell_for_coord(board_t const * board, dim_t const * coords) {
+lexicon::cell_t * lexicon::board_cell_for_coord(board_t const * board, dim_t const * coords) {
 	celllen_t index = 0;
 	celllen_t span = 1;
 	for (dimn_t d = 0; d < board->dimn; d++) {
