@@ -2,18 +2,23 @@
 #include <cstdio>
 #include <cstring>
 
+#include <atomic>
+
 #include "lexicon/common.hpp"
 #include "lexicon/timing.hpp"
 #include "module.hpp"
 #include "error.hpp"
+#include "game.hpp"
 
 char com_str[1024];
 
-static bool cmd_run = true;
+static std::atomic_bool cmd_run {true};
 
 int command_loop() {
-	lexicon::frame_timer t {60};
+	lexicon::frame_timer t {30};
 	t.start();
+	game::start();
+	module::signal_game_start();
 	while (cmd_run) {
 		if (!module::signal_update(t.gametime, t.impulse)) {
 			gmerrf(errlev::log, "No more modules loaded, shutting down...");
@@ -23,6 +28,7 @@ int command_loop() {
 		t.end_frame();
 	}
 	gmerrf(errlev::log, "Shutting Down...");
+	module::signal_game_end();
 	module::shutdown();
 	return 0;
 }

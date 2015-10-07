@@ -6,20 +6,20 @@
 #include <mutex>
 #include <thread>
 
-class rwqmutex {
+class rwq_spinlock_mutex {
 public:
-	rwqmutex(std::chrono::nanoseconds wait_time = std::chrono::nanoseconds{1000}) : wait_time(wait_time) {}
-	virtual ~rwqmutex() {}
+	rwq_spinlock_mutex() {}
+	virtual ~rwq_spinlock_mutex() {}
 	bool read_access();
 	void read_done();
 	bool write_lock();
 	void write_unlock();
-	void quarantine_lock();
-	void quarantine_unlock();
+	void quarantine();
+	void unquarantine();
 private:
-	std::chrono::nanoseconds wait_time;
 	std::atomic_bool	access_semaphore {false},
 						write_request_semaphore {false},
+						write_semaphore {false},
 						quarantine_semaphore {false};
 	std::atomic<unsigned int> readnum {0};
 };

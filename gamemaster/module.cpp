@@ -1,13 +1,17 @@
 #include <algorithm>
+#include <cstdarg>
 #include <dlfcn.h>
 #include <vector>
 
 #include "lexicon/common.hpp"
+#include "lexicon/rwmutex.hpp"
 #include "lexicon/player_api.hpp"
 #include "module.hpp"
 #include "error.hpp"
 
 using namespace module;
+
+static rwq_spinlock_mutex mod_ctrl;
 
 typedef struct module_s {
 	void * handle;
@@ -38,9 +42,11 @@ static inline void close_module(module_t & mod) {
 }
 
 bool module::load(char const * path) {
+	mod_ctrl.write_lock();
 	imod.handle = dlopen(vas("./modules/%s", path), RTLD_NOW);
 	if (!imod.handle) {
-		gmerrf(errlev::error, "module \"%s\" does not exist.", path);
+		gmerrf(errlev::error, "module \"%s\" could not be loaded: %s.", path, dlerror());
+		mod_ctrl.write_unlock();
 		return false;
 	}
 
@@ -48,6 +54,7 @@ bool module::load(char const * path) {
 	if (!imod.initialize) {
 		gmerrf(errlev::error, "module \"%s\" missing REQUIRED function: \"%s\".", path, "mod_initialize");
 		dlclose(imod.handle);
+		mod_ctrl.write_unlock();
 		return false;
 	}
 
@@ -55,6 +62,7 @@ bool module::load(char const * path) {
 	if (!imod.update) {
 		gmerrf(errlev::error, "module \"%s\" missing REQUIRED function: \"%s\".", path, "mod_update");
 		dlclose(imod.handle);
+		mod_ctrl.write_unlock();
 		return false;
 	}
 
@@ -74,6 +82,7 @@ bool module::load(char const * path) {
 	if (imod.initialize(imod.handle)) {
 		modules.push_back(imod);
 		memset(&imod, 1, sizeof(module_t));
+		mod_ctrl.write_unlock();
 		return true;
 	}
 
@@ -81,6 +90,7 @@ bool module::load(char const * path) {
 	free(imod.name);
 	dlclose(imod.handle);
 	memset(&imod, 1, sizeof(module_t));
+	mod_ctrl.write_unlock();
 	return false;
 }
 
@@ -109,11 +119,27 @@ bool module::signal_update(unsigned int gametime, double impulse) {
 #include "xmodule.hpp"
 #undef XMOD_CALL
 
-#define gmmodstart(erret...) module_t * mod = find_module(h); if (!mod){ gmerrf(errlev::error, vas("module called GM function with invalid handle (0x%lx).", h)); return erret;}
+//================================================================
+//GAMEMASTER API
+//================================================================
 
-GMAPIPUBLIC void gm_printf(handle_t h, errlev err, const char * fmt, ...) {
-	gmmodstart();
+#define gmmodstart(erret...) \
+	mod_ctrl.read_access(); \
+	module_t * mod = find_module(h);\
+	if (!mod){ \
+		gmerrf(errlev::error, vas("module called GM function with invalid handle (0x%lx).", h)); \
+		return erret; \
+	}
+
+#define gmmodend() \
+	mod_ctrl.read_done();
+
+GMAPIPUBLIC void gm_print(handle_t h, errlev err, const char * fmt, ...) { gmmodstart();
 	va_list va;
 	va_start(va, fmt);
 	gmerror(err, vas("%s (0x%lx): %s", mod->name, h, vasa(fmt, va)));
+
+	gmmodend();
 }
+
+//================================================================

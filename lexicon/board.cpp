@@ -1,5 +1,6 @@
 #include "board.hpp"
 
+/*
 void lexicon::board_create(board_t * board, dimn_t dimn, dim_t const * dims) {
 	board->dimn = dimn;
 	board->dims = (dim_t *)(malloc(dimn * sizeof(dim_t)));
@@ -25,3 +26,4 @@ lexicon::cell_t * lexicon::board_cell_for_coord(board_t const * board, dim_t con
 	}
 	return board->cells + index;
 }
+*/

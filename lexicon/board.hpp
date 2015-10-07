@@ -1,6 +1,8 @@
 #ifndef LEXICON_BOARD_HPP
 #define LEXICON_BOARD_HPP
 
+#include <atomic>
+
 #include "common.hpp"
 
 namespace lexicon {

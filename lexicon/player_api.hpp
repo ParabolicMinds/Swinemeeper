@@ -15,8 +15,9 @@ PAPIPUBLIC bool mod_update(unsigned int gametime, double impulse); //return fals
 //OPTIONAL
 PAPIPUBLIC void mod_shutdown();
 PAPIPUBLIC void mod_game_start();
+PAPIPUBLIC void mod_game_end();
 
 //GAMEMASTER CALLS
-GMAPIPUBLIC void gm_printf(handle_t, errlev, char const * fmt, ...);
+GMAPIPUBLIC void gm_print(handle_t, errlev, char const * fmt, ...);
 
 #endif //SWINEMEEPER_PLAYER_API_HPP

@@ -32,6 +32,8 @@
 #endif
 
 XFUNC0(game_start)
+XFUNC0(game_end)
+
 
 #undef XFUNC0
 #undef XFUNC1
